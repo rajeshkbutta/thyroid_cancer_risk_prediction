@@ -1,1 +1,1 @@
-from .data_visualizer import create_plots, outlier_analysis
+from .data_visualizer import create_plots, outlier_analysis, plot_model_comparison

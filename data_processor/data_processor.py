@@ -1,4 +1,10 @@
 import pandas as pd
+import category_encoders as ce
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+
+
+one_hot_encoder = OneHotEncoder(sparse_output=False, drop='first')
+
 
 def get_all_data(file_path):
     try:
@@ -56,145 +62,173 @@ def pt_identifier_removal(data):
 
 
 def gender_encoding(data):
-    for row in range(data.shape[0]):
-        if data["Gender"][row] == "Male":
-            data.loc[row, "Gender"] = 0
-        else:
-            data.loc[row, "Gender"] = 1
-    return data
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Gender']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Gender'])
+
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
+
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Gender', axis=1), encoded_df], axis=1)
+
+    return df_encoded
 
 
 def country_encoding(data):
-    countries = ['Russia', 'Germany', 'Nigeria', 'India', 'UK', 'South Korea', 'Brazil', 'China', 'Japan', 'USA']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Country']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Country'])
 
-    # Create a mapping from country name to its index
-    country_to_index = {country: index for index, country in enumerate(countries)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Country'] = country_to_index[data['Country'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Country', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
+
 
 def ethnicity_encoding(data):
-    ethnicities = ['Caucasian', 'Hispanic', 'Asian', 'African', 'Middle Eastern']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Ethnicity']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Ethnicity'])
 
-    # Create a mapping from country name to its index
-    ethnicity_to_index = {ethnicity: index for index, ethnicity in enumerate(ethnicities)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Ethnicity'] = ethnicity_to_index[data['Ethnicity'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Ethnicity', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
+
 
 def family_history_encoding(data):
-    FHs = ['Yes', 'No']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Family_History']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Family_History'])
 
-    # Create a mapping from country name to its index
-    FH_to_index = {FH: index for index, FH in enumerate(FHs)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Family_History'] = FH_to_index[data['Family_History'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Family_History', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
+
 
 def radiation_exposure_encoding(data):
-    radiation_exposures = ['Yes', 'No']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Radiation_Exposure']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Radiation_Exposure'])
 
-    # Create a mapping from country name to its index
-    radiation_exposure_to_index = {radiation_exposure: index for index, radiation_exposure in enumerate(radiation_exposures)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Radiation_Exposure'] = radiation_exposure_to_index[data['Radiation_Exposure'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Radiation_Exposure', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
+
 
 def iodine_deficiency_encoding(data):
-    iodine_deficiencies = ['Yes', 'No']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Iodine_Deficiency']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Iodine_Deficiency'])
 
-    # Create a mapping from country name to its index
-    iodine_deficiency_to_index = {iodine_deficiency: index for index, iodine_deficiency in enumerate(iodine_deficiencies)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Iodine_Deficiency'] = iodine_deficiency_to_index[data['Iodine_Deficiency'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Iodine_Deficiency', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
 
 
 def smoking_encoding(data):
-    smoking_encodings = ['Yes', 'No']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Smoking']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Smoking'])
 
-    # Create a mapping from country name to its index
-    smoking_to_index = {smoking_encoding: index for index, smoking_encoding in enumerate(smoking_encodings)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Smoking'] = smoking_to_index[data['Smoking'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Smoking', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
 
 
 def obesity_encoding(data):
-    obesity_encodings = ['Yes', 'No']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Obesity']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Obesity'])
 
-    # Create a mapping from country name to its index
-    obesity_to_index = {obesity_encoding: index for index, obesity_encoding in enumerate(obesity_encodings)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Obesity'] = obesity_to_index[data['Obesity'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Obesity', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
 
 
 def diabetes_encoding(data):
-    diabetes_encodings = ['Yes', 'No']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Diabetes']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Diabetes'])
 
-    # Create a mapping from country name to its index
-    diabetes_to_index = {diabetes_encoding: index for index, diabetes_encoding in enumerate(diabetes_encodings)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Diabetes'] = diabetes_to_index[data['Diabetes'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Diabetes', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
 
 
 def thyroid_cancer_risk_encoding(data):
-    thyroid_cancer_risk_encodings = ['Low', 'Medium', 'High']
-
-    # Create a mapping from country name to its index
-    thyroid_cancer_risk_to_index = {thyroid_cancer_risk_encoding: index for index, thyroid_cancer_risk_encoding in enumerate(thyroid_cancer_risk_encodings)}
-
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Thyroid_Cancer_Risk'] = thyroid_cancer_risk_to_index[data['Thyroid_Cancer_Risk'][row]]
-
+    order = ['Low','Medium','High']
+    ordinal_encoder = OrdinalEncoder(categories=[order])
+    data[['Thyroid_Cancer_Risk']] = ordinal_encoder.fit_transform(data[['Thyroid_Cancer_Risk']])
     return data
 
 
 def diagnosis_encoding(data):
-    diagnosis_encodings = ['Benign', 'Malignant']
+    global one_hot_encoder
+    encoded_data = one_hot_encoder.fit_transform(data[['Diagnosis']])
+    # Get feature names
+    encoded_columns = one_hot_encoder.get_feature_names_out(['Diagnosis'])
 
-    # Create a mapping from country name to its index
-    diagnosis_to_index = {diagnosis_encoding: index for index, diagnosis_encoding in enumerate(diagnosis_encodings)}
+    # Create a DataFrame with encoded features
+    encoded_df = pd.DataFrame(encoded_data, columns=encoded_columns)
 
-    # Replace the 'country' column values with their corresponding indices
-    for row in range(data.shape[0]):
-        data.loc[row, 'Diagnosis'] = diagnosis_to_index[data['Diagnosis'][row]]
+    # Concatenate with the original DataFrame (excluding original categorical columns)
+    df_encoded = pd.concat([data.drop('Diagnosis', axis=1), encoded_df], axis=1)
 
-    return data
+    return df_encoded
+
+
+def input_output_split(df):
+    input = df.drop(['Diagnosis_Malignant'], axis=1)
+    output = df['Diagnosis_Malignant']
+    return input, output
 
 
 def process_data_thru_pipeline(data):
     if data.empty:
         raise IndexError
     data = pt_identifier_removal(data)
-#   data = encoder(data)
+    #data = encoder(data)
     data = gender_encoding(data)
     data = country_encoding(data)
     data = ethnicity_encoding(data)
@@ -234,3 +268,14 @@ def identify_outliers(df, columns):
             outliers_dict[col] = outliers
 
     return outliers_dict
+
+
+def data_normalization(data):
+    return (data-data.mean())/data.std()
+
+
+def normalize_all_data(df):
+    normalizable_columns = ['Age', 'TSH_Level', 'T3_Level', 'T4_Level', 'Nodule_Size']
+    for col in normalizable_columns:
+        df[col] = data_normalization(df[col])
+    return df

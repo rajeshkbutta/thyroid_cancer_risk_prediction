@@ -1173,7 +1173,7 @@ def create_plots(df, unprocessed_df):
     #plot_country_distribution(unprocessed_df)
     #plot_age_distribution_by_country(unprocessed_df)
     #plot_population_pyramids(unprocessed_df)
-    plot_age_distribution_by_ethnicity(unprocessed_df)
+    #plot_age_distribution_by_ethnicity(unprocessed_df)
     #plot_ethnicity_gender_histogram(unprocessed_df)
     #plot_ethnicity_distribution_by_country(unprocessed_df)
     #plot_family_history_relationships(unprocessed_df)
@@ -1229,3 +1229,44 @@ def plot_boxplots(df):
 
 def outlier_analysis(unprocessed_df):
     plot_boxplots(unprocessed_df)
+
+
+def plot_model_comparison(scores_dict):
+    # Extract model names and corresponding scores
+    models = list(scores_dict.keys())
+    validation_scores = [scores_dict[model][0] for model in models]
+    accuracy_scores = [scores_dict[model][1] for model in models]
+
+    # Define the position of the bars on the x-axis
+    x = np.arange(len(models))
+    width = 0.35  # Width of the bars
+
+    # Create the plot
+    fig, ax = plt.subplots()
+    bars1 = ax.bar(x - width / 2, validation_scores, width, label='Validation Score')
+    bars2 = ax.bar(x + width / 2, accuracy_scores, width, label='Accuracy Score')
+
+    # Add labels, title, and custom x-axis tick labels
+    ax.set_xlabel('Models')
+    ax.set_ylabel('Scores')
+    ax.set_title('Model Comparison: Validation and Accuracy Scores')
+    ax.set_xticks(x)
+    ax.set_xticklabels(models)
+    ax.legend()
+
+    # Attach a text label above each bar displaying its height
+    def add_labels(bars):
+        for bar in bars:
+            height = bar.get_height()
+            ax.annotate(f'{height:.2f}',
+                        xy=(bar.get_x() + bar.get_width() / 2, height),
+                        xytext=(0, 3),  # 3 points vertical offset
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+
+    add_labels(bars1)
+    add_labels(bars2)
+
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
